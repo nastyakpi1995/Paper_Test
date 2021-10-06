@@ -27,8 +27,8 @@ const AddNoteFormComponent = ({noteList, addNewNote, onCancel}: IAddNoteFormComp
             created: fullDate,
             lastUpdated: fullDate
         }
-        noteList?.push(newNote)
-        addNewNote(noteList)
+        const newNoteList = [...noteList, newNote]
+        addNewNote(newNoteList)
         onCancel()
     }
 

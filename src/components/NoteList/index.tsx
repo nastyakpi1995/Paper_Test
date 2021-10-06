@@ -5,6 +5,7 @@ import { Button, Modal } from 'antd';
 import NoteComponent from "../Note";
 import AddNoteFormComponent from "../AddNoteForm";
 import {INote, IState} from "../../types";
+import {styles} from "./styles";
 
 interface INoteList {
     noteList: INote[];
@@ -12,14 +13,14 @@ interface INoteList {
 }
 
 const NoteList = ({requestGetNoteList, noteList}: INoteList) => {
-    const [selectItem, setSelectItem] = useState({})
+    const [currentNote, setCurrentNote] = useState({})
     const [isModalVisible, setIsModalVisible] = useState(false)
 
     const showModal = () => setIsModalVisible(true);
     const handleCancel = () => setIsModalVisible(false);
 
     useEffect(() => {
-        setSelectItem(noteList[0])
+        setCurrentNote(noteList[0])
     }, [noteList])
 
     useEffect(() => {
@@ -28,21 +29,21 @@ const NoteList = ({requestGetNoteList, noteList}: INoteList) => {
 
     const onClickItem = (id?: number) => {
         const newSelectItem = noteList.filter((el: INote) => el.id === id);
-        setSelectItem(newSelectItem[0])
+        setCurrentNote(newSelectItem[0])
     }
 
     return (
-        <div style={{border: '1px solid', paddingLeft: 420, paddingRight: 420, marginTop: 20, margin: 20, display: "flex", flexDirection: 'row', justifyContent: 'space-between'}}>
+        <div style={styles.mainWrap}>
             <div>
                 {noteList?.map((el: INote) => (
                     <div key={el.id} onClick={() => onClickItem(el?.id)}>
-                        <NoteComponent selectItem={el} />
+                        <NoteComponent currentNote={el} />
                     </div>
                 ))}
             </div>
-            {selectItem && (
+            {currentNote && (
                 <div>
-                    <NoteComponent selectItem={selectItem} />
+                    <NoteComponent currentNote={currentNote} />
                     <Button onClick={showModal} style={{marginTop: 30}}>Add new note</Button>
                 </div>
             )}

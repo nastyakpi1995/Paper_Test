@@ -2,10 +2,10 @@ import React from "react";
 import {INote} from "../../types";
 
 interface INoteComponent {
-    selectItem: INote;
+    currentNote: INote;
 }
 const NoteComponent = (props: INoteComponent) => {
-    const {id, text, created, lastUpdated} = props?.selectItem
+    const {id, text, created, lastUpdated} = props?.currentNote
 
     return (
         <div>
