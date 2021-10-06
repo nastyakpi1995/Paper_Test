@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import NoteList from "./components/NoteList";
+import 'antd/dist/antd.css';
 
 const App = () => {
-  return (<div style={{background: 'red'}}>dfdfd</div>);
+  return (
+      <NoteList />
+  );
 }
 
-const mapStateToProps = (store: any) => {
-  return ({
-    user: store.user
-  })
-}
-export default connect(mapStateToProps)(App);
+export default connect(null)(App);

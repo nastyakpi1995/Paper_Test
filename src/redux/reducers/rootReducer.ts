@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
 
-import userReducer from './userReducer';
+import noteListReducer from './noteListReducer';
 
 const rootReducer = combineReducers({
-    user: userReducer
+    noteList: noteListReducer
 })
 export default rootReducer;

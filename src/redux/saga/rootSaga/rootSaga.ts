@@ -1,6 +1,6 @@
 import { all } from 'redux-saga/effects';
-import {startSagas} from "./categorySaga";
+import {notesSaga} from "./notesSaga";
 
 export function * rootSaga() {
-    yield all([startSagas()])
+    yield all([notesSaga()])
 }
