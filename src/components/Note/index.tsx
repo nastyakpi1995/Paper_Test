@@ -1,5 +1,6 @@
 import React from "react";
 import {INote} from "../../types";
+import {Card} from "antd";
 
 interface INoteComponent {
     currentNote: INote;
@@ -8,12 +9,11 @@ const NoteComponent = (props: INoteComponent) => {
     const {id, text, created, lastUpdated} = props?.currentNote
 
     return (
-        <div>
-            <div>{id}</div>
-            <div>{text}</div>
-            <div>{created}</div>
-            <div>{lastUpdated}</div>
-        </div>
+        <Card title={text}>
+            <p>id: {id}</p>
+            <p>created: {created}</p>
+            <p>lastUpdated: {lastUpdated}</p>
+        </Card>
     )
 }
 

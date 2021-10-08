@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import { requestGetNoteList } from "../../redux/saga/actions";
-import { Button, Modal } from 'antd';
+import { Button, Drawer, List } from 'antd';
 import NoteComponent from "../Note";
 import AddNoteFormComponent from "../AddNoteForm";
-import {INote, IState} from "../../types";
-import {styles} from "./styles";
+import { INote, IState } from "../../types";
+import { styles } from "./styles";
 
 interface INoteList {
     noteList: INote[];
@@ -34,22 +34,35 @@ const NoteList = ({requestGetNoteList, noteList}: INoteList) => {
 
     return (
         <div style={styles.mainWrap}>
-            <div>
-                {noteList?.map((el: INote) => (
-                    <div key={el.id} onClick={() => onClickItem(el?.id)}>
-                        <NoteComponent currentNote={el} />
-                    </div>
-                ))}
-            </div>
-            {currentNote && (
+                <List
+                   dataSource={noteList}
+                   renderItem={item => (
+                       <List.Item
+                           key={item.id}
+                           style={styles.list}
+                           onClick={() => onClickItem(item?.id)}
+                       >
+                           <List.Item.Meta
+                               title={item.text}
+                               description={item.id}
+                           />
+                       </List.Item>
+                   )}
+                />
+
                 <div>
-                    <NoteComponent currentNote={currentNote} />
+                    {currentNote && (<NoteComponent currentNote={currentNote} />  )}
                     <Button onClick={showModal} style={{marginTop: 30}}>Add new note</Button>
                 </div>
-            )}
-            <Modal visible={isModalVisible} onOk={handleCancel} onCancel={handleCancel}>
+
+            <Drawer
+                title="Create a new note"
+                width={720}
+                onClose={handleCancel}
+                visible={isModalVisible}
+            >
                 <AddNoteFormComponent onCancel={handleCancel} />
-            </Modal>
+            </Drawer>
 
         </div>
     )
