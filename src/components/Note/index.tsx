@@ -1,5 +1,5 @@
 import React from "react";
-import {INote} from "../../types";
+import {INote} from "types";
 import {Card} from "antd";
 
 interface INoteComponent {

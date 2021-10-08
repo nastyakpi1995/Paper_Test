@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
-import { requestGetNoteList } from "../../redux/saga/actions";
+import { requestGetNoteList } from "redux/saga/actions";
 import { Button, Drawer, List } from 'antd';
-import NoteComponent from "../Note";
-import AddNoteFormComponent from "../AddNoteForm";
-import { INote, IState } from "../../types";
+import NoteComponent from "components/Note";
+import AddNoteFormComponent from "components/AddNoteForm";
+import { INote, IState } from "types";
 import { styles } from "./styles";
 
 interface INoteList {

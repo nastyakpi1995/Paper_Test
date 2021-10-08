@@ -1,4 +1,4 @@
-import {typesAction} from "../redux/saga/typesAction";
+import {typesAction} from "redux/saga/typesAction";
 
 export interface INote {
     id?: number;

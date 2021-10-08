@@ -1,5 +1,5 @@
 import {ActionTypes} from "../../types";
-import { typesAction } from "../saga/typesAction";
+import { typesAction } from "redux/saga/typesAction";
 
 const initialState = {
     noteList: [],

@@ -1,7 +1,7 @@
 import {takeLatest, put} from 'redux-saga/effects';
-import noteListData from '../../../data/noteListData';
-import {typesAction} from "../typesAction";
-import { successGetNoteList} from "../actions";
+import noteListData from 'data/noteListData';
+import {typesAction} from "redux/saga/typesAction";
+import { successGetNoteList} from "redux/saga/actions";
 
 function * noteFetchToAsync() {
     try{

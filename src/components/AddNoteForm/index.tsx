@@ -1,9 +1,10 @@
 import React from "react";
-import {Form, Input, Button} from "antd";
-
-import { addNewNote } from "../../redux/saga/actions";
 import {connect} from "react-redux";
-import {INote, IState, IValuesAddNote} from "../../types";
+
+import {Form, Input, Button} from "antd";
+import { addNewNote } from "redux/saga/actions";
+import {INote, IState, IValuesAddNote} from "types";
+import moment from "moment";
 
 interface IAddNoteFormComponent {
     noteList: INote[];
@@ -19,7 +20,7 @@ const AddNoteFormComponent = ({noteList, addNewNote, onCancel}: IAddNoteFormComp
 
     const handleAddNote = (values: IValuesAddNote) => {
         const date = new Date()
-        const fullDate = new Date().getMonth() + '.' + new Date().getUTCDay() + '.' + new Date().getUTCFullYear();
+        const fullDate = moment().format('MMMM Do YYYY, h:mm:ss a')
 
         const newNote = {
             id: date.getMilliseconds(),
