@@ -1,71 +1,51 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { Form, Input, Button } from "antd";
-import { addNewNote } from "redux/saga/actions";
-import { INote, IState, IValuesAddNote } from "types";
-import moment from "moment";
+import { Form, Input, Button } from 'antd'
+import { IState, IValuesAddNote } from 'types'
+import { INote } from '../../types'
 
 interface IAddNoteFormComponent {
-  noteList: INote[];
-  addNewNote: (noteList: INote[]) => void;
-  onCancel: () => void;
+    handleClick: (values: IValuesAddNote) => void
+    currentNote?: INote;
+    handleCancel: () => void;
 }
 
-const AddNoteFormComponent = ({
-  noteList,
-  addNewNote,
-  onCancel,
-}: IAddNoteFormComponent) => {
-  const [form] = Form.useForm();
-  const initialValues = {
-    text: "",
-  };
+const AddNoteFormComponent = ({ handleClick, currentNote, handleCancel }: IAddNoteFormComponent) => {
+    const [form] = Form.useForm()
 
-  const handleAddNote = (values: IValuesAddNote) => {
-    const date = new Date();
-       const fullDate = moment().format("MMMM Do YYYY, h:mm:ss a");
+    const initialValues = {
+        text: currentNote ? currentNote.text : '',
+    }
 
-    const newNote = {
-      id: date.getMilliseconds(),
-      text: values.text,
-      created: fullDate,
-      lastUpdated: fullDate,
-    };
-    const newNoteList = [...noteList, newNote];
-    addNewNote(newNoteList);
-    onCancel();
-  };
+    const onFinish = (values: any) => {
+        const prepareData = {
+            ...values,
+            id: currentNote ? currentNote.id : '',
+        }
+        handleCancel()
+        handleClick(prepareData)
+    }
 
-  return (
-    <Form
-      form={form}
-      layout="vertical"
-      initialValues={initialValues}
-      onFinish={handleAddNote}
-    >
-      <Form.Item
-        label="Text"
-        required
-        tooltip="This is a required field"
-        name="text"
-      >
-        <Input placeholder="input placeholder" />
-      </Form.Item>
+    return (
+        <Form form={form} layout="vertical" initialValues={initialValues} onFinish={(values) => onFinish(values)}>
+            <Form.Item label="Text" required tooltip="This is a required field" name="text">
+                <Input placeholder="input placeholder" />
+            </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
-  );
-};
+            <Form.Item>
+                <Button type="primary" htmlType="submit">
+                    Submit
+                </Button>
+            </Form.Item>
+        </Form>
+    )
+}
 const mapStateToProps = (state: IState) => {
-  return {
-    noteList: state.noteList.noteList,
-    loading: state.noteList.loading,
-  };
-};
+    return {
+        noteList: state.noteList.noteList,
+        loading: state.noteList.loading,
+    }
+}
 
-export default connect(mapStateToProps, { addNewNote })(AddNoteFormComponent);
+export default connect(mapStateToProps, null)(AddNoteFormComponent)
