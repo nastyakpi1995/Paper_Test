@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 import { connect } from 'react-redux'
 import { requestGetNoteList } from 'redux/saga/actions'
 import { Button, Drawer, List } from 'antd'
@@ -8,37 +8,40 @@ import AddNoteFormComponent from 'components/AddNoteForm'
 import { INote, IState, IValuesAddNote } from 'types'
 import { styles } from './styles'
 import moment from 'moment'
-import { updateNote } from 'redux/saga/actions'
 
 interface INoteList {
-    noteList: INote[]
-    updateNote: (noteList: INote[]) => void
     requestGetNoteList: () => void
 }
 
-const NoteList = ({ requestGetNoteList, noteList, updateNote }: INoteList) => {
+const NoteList = ({ requestGetNoteList }: INoteList) => {
     const [currentNoteDetails, setCurrentNoteDetails] = useState({})
     const [isModalVisible, setIsModalVisible] = useState(false)
+    const [noteList, setNoteList] = useState<INote[] | null>(null)
 
     const showModal = () => setIsModalVisible(true)
     const handleCancel = () => setIsModalVisible(false)
 
     useEffect(() => {
-        setCurrentNoteDetails(noteList[0])
-    }, [noteList])
-
+        if (!noteList) {
+            requestGetNoteList()
+        }
+    }, [])
     useEffect(() => {
-        requestGetNoteList()
+        const notes = JSON.parse(localStorage.getItem('notes') || '[]')
+        setNoteList(notes)
+        setCurrentNoteDetails(notes[0])
     }, [])
 
     const onClickItem = (id?: number) => {
-        const newSelectItem = noteList.filter((el: INote) => el.id === id)
-        setCurrentNoteDetails(newSelectItem[0])
+        if (noteList) {
+            const newSelectItem = noteList?.filter((el: INote) => el.id === id)
+            setCurrentNoteDetails(newSelectItem[0])
+        }
     }
 
     const handleAddNote = (values: IValuesAddNote) => {
         const date = new Date()
-        const fullDate = moment().format('MMMM Do YYYY, h:mm:ss a')
+        const fullDate = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
 
         const newNote = {
             id: date.getMilliseconds(),
@@ -47,30 +50,35 @@ const NoteList = ({ requestGetNoteList, noteList, updateNote }: INoteList) => {
             lastUpdated: fullDate,
         }
 
-        const newNoteList = [...noteList, newNote]
-        updateNote(newNoteList)
+        const newNoteList = noteList && [...noteList, newNote]
+        localStorage.setItem('notes', JSON.stringify(newNoteList))
+        setNoteList(newNoteList)
         handleCancel()
     }
     const handleEditNote = (values: IValuesAddNote) => {
-        const fullDate = moment().format('MMMM Do YYYY, h:mm:ss a')
+        const date = new Date()
+        const fullDate = `${date.getDate()}.${date.getMonth()}.${date.getFullYear()}`
 
-        const newNoteList = noteList.map((el) => {
+        const newNoteList = noteList && noteList.map((el: INote) => {
             if (el.id === values.id) {
                 el.text = values.text
                 el.lastUpdated = fullDate
             }
             return el
         })
-
-        updateNote(newNoteList)
+        localStorage.setItem('notes', JSON.stringify(newNoteList))
+        setNoteList(newNoteList)
     }
     const handleDeleteNote = (id?: number) => {
-        const newNoteList = noteList.filter(el => el.id !== id)
-
-        updateNote(newNoteList)
+        if (noteList !== null) {
+            const newNoteList = noteList.filter((el: INote) => el.id !== id)
+            localStorage.setItem('notes', JSON.stringify(newNoteList))
+            setNoteList(newNoteList)
+            setCurrentNoteDetails(newNoteList[0])
+        }
     }
 
-    return (
+    return noteList ? (
         <div style={styles.mainWrap}>
             <List
                 dataSource={noteList}
@@ -93,14 +101,13 @@ const NoteList = ({ requestGetNoteList, noteList, updateNote }: INoteList) => {
                 <AddNoteFormComponent handleClick={handleAddNote} handleCancel={handleCancel} />
             </Drawer>
         </div>
-    )
+    ) : <div>loadding</div>
 }
 
 const mapStateToProps = (state: IState) => {
     return {
-        noteList: state.noteList.noteList,
         loading: state.noteList.loading,
     }
 }
 
-export default connect(mapStateToProps, { requestGetNoteList, updateNote })(NoteList)
+export default connect(mapStateToProps, { requestGetNoteList })(NoteList)

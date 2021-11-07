@@ -1,11 +1,13 @@
 import { takeLatest, put } from 'redux-saga/effects'
-import noteListData from 'data/noteListData'
 import { typesAction } from 'redux/saga/typesAction'
 import { successGetNoteList } from 'redux/saga/actions'
+import noteListData from 'data/noteListData';
 
 function* noteFetchToAsync() {
     try {
-        yield put(successGetNoteList(noteListData()))
+        const noteList = noteListData()
+
+        yield put(successGetNoteList(noteList))
     } catch (e) {
         console.log(e)
         // yield put(errorGetNoteList(e))
