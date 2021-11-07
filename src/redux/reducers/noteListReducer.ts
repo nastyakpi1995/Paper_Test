@@ -1,35 +1,33 @@
-import {ActionTypes} from "../../types";
-import { typesAction } from "../saga/typesAction";
+import { ActionTypes } from '../../types'
+import { typesAction } from 'redux/saga/typesAction'
 
 const initialState = {
     noteList: [],
     loading: false,
-    errors: ''
+    errors: '',
 }
-export default (
-    state = initialState,
-    action: ActionTypes,
-) => {
+export default (state = initialState, action: ActionTypes) => {
     switch (action?.type) {
         case typesAction.SUCCESS_GET_NOTE_LIST:
             return {
                 ...state,
-               noteList: action.data,
-                loading: false
+                noteList: action.data,
+                loading: false,
             }
-            case typesAction.ERROR_GET_NOTE_LIST:
+        case typesAction.ERROR_GET_NOTE_LIST:
             return {
                 ...state,
                 errors: action.data,
-                loading: false
+                loading: false,
             }
-        case typesAction.ADD_NEW_NOTE:
+        case typesAction.UPDATE_NOTE:
             return {
                 ...state,
-                noteList: action.data
+                noteList: action.data,
             }
+
         default: {
-            return state;
+            return state
         }
     }
 }

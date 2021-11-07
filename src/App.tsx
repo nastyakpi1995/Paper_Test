@@ -1,11 +1,9 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import NoteList from "./components/NoteList";
+import React from 'react'
+import { connect } from 'react-redux'
+import NoteList from 'components/NoteList'
 
 const App = () => {
-  return (
-      <NoteList />
-  );
+    return <NoteList />
 }
 
-export default connect(null)(App);
+export default connect(null)(App)
